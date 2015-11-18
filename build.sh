@@ -11,8 +11,8 @@ set -e
 
 # build site with jekyll, by default to `_site' folder
 bundle exec jekyll build
-#find ./_site -name "*.html" -exec bundle exec htmlbeautifier {} \;
-#bundle exec htmlproof ./_site --disable-external --check-html --verbose
+find ./_site -name "*.html" -exec bundle exec htmlbeautifier {} \;
+bundle exec htmlproof ./_site --disable-external --check-html --verbose
 
 # cleanup
 rm -rf ../mlota.github.io.master
