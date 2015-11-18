@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+    <div role="main" class="container main-content">
+        {{ content }}
+    </div>
+    {% include footer.html %}
+    {% if jekyll.environment != "development" %}
+    	{% include google-analytics.html %}
+    {% endif %}
+  </body>
+</html>
