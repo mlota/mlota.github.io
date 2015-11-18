@@ -1,7 +1,7 @@
 sudo: false
 language: ruby
 before_script:
-  - chmod +x "./build.sh"
+- chmod +x "./build.sh"
 script: "./build.sh"
 branches:
   only:
@@ -11,4 +11,4 @@ rvm:
 env:
   global:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-  - secure: UqbVpWrkIe4TGreSCHGlXw+x9yLTBmE4y1F0vzIyYW3oVaey3KNgBP9LxmjCPZDLTt/ySshtiPrGLFAS/+Z05ZnpL159/EFGp9x1/IDSskrHXSudJ7Uh0X+ttC/T2n1x/5kzuR1s3UnGM6SLHCqKOyKstmNnAzQKygk0i0PcPQYXjyqH/XN5kC63P1B7ILQxE76iRC72dbsrDsKySImQhSEdFob06ziwCZVM9eTiumXWtqIIXguwie+2tpjWTGDjjLConje4zNSBb8fR+jLuqYONQKR6QSgGeEm9qWCszSZ/Xo/j9v+xgGsdXMdT0NTA7I1UUDcdMXgSXJx2ZhLimIWDNi83pzk8KzbrXRlc2Yp/CVoLUL1YhBJJ2Tp2xxqRZnvry0AxAhwJ7EMQGEMrmQo+XWg8t5I2rlywtJ2HD4+pY//F3AYzvLFePTHa0q4kQsB1hS52P+7UiuYW9OFVFK3jhnUvJ6wABjerMU5ZfdQl+D/VcB/ktQvrjGMwkPvbWRq+6JaXXBZNlK36xOWijqKr+H7LDwdILemsP0030PPGSAS4FbBqT+dRfvb/3jtQjkoSK1GqVU6MPR7IEyPsW/vQfG3K29k5Kl3DVQXsj7YEy/3tG6DJe+Wpx30i+Gi1XRtV7QDQhWsyppdGrkV6jtM2gZjvWxRJwpTDyturzAE=
+  - secure: Ndei8hQU1V8zzcH/f/zgPtqRRRSt80Kfbu1HCRv17qUWb4YOGuKG0/+EXB3yr4XiT00fZdee/7ZeycwQcm2HVNbhEXKHiuj6caMjo8YQ3jwZhMY9nmhtBNH7dYPsjZYp3+lBhf98Bd3X+ieHXcl226S/m+E20R5fraXY/1C7B8atVK74rQsFvJ3h1zjyW5wkDfcNAJcrUxNwbQXJAgNd3hHRF8Kq1yYXxtwtqKv7C1Tto7Ltc/fKdo0u1Y6iApvZCYdv3ZUxVD4lEYKNqjbKLqw3dk5SN9F9MnDNw9Id26fwdu4CTQpYsAsYThdAmJIu234QLRGyfefv7J5m4OFlTbC4PsR1B+TzrMb7KhH9E9vroQ0WYkOsuLmx9bgZ6HvjoP+6Xc1tKH2LsV8Fg8RGhjs+P1xGGmLK8LVlbtAMSORb8Dl5JKEkRmphjdl7mx4l4nkX3x7cFDevFQ/mAEs/AW4S0tIPYOUIZk65436UYrj2YpLKoLZXpJBqvhm8SdT2sFcOURMzewTMln/bKFwE1bbyWLBqARFsCTjJWQZp0ugrwjTtw/l80Cb4j3KiTVxLwgRnOY+3U3/oM5kUDZSIS4qrdgs/6/vEtlgcoqBxMcMqks2oqcpkPgsmFYvtMQ8N5thnHI/6hgX0zdjHitOtklYSvFwrtFYr1LNzAxUugcg=
