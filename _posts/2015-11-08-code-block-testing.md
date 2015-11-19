@@ -7,7 +7,7 @@ subtitle: Lorem ipsum dolor sit amet
 Lorem ipsum dolor sit amet
 
 ## HTML
-{% highlight html %}
+{% highlight html linenos %}
 <div class="foo">
   <span>Hello world</span>
 </div>
@@ -15,7 +15,7 @@ Lorem ipsum dolor sit amet
 
 ## JavaScript
 
-{% highlight javascript linenos %}
+{% highlight javascript %}
 // Shorten the navbar after scrolling a little bit down
 $(window).scroll(function() {
     if ($(".navbar").offset().top > 50) {
