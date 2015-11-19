@@ -7,7 +7,7 @@ subtitle: Lorem ipsum dolor sit amet
 Lorem ipsum dolor sit amet
 
 ## HTML
-{% highlight html linenos %}
+{% highlight html %}
 <div class="foo">
   <span>Hello world</span>
 </div>
@@ -35,7 +35,7 @@ $('#main-navbar').on('hidden.bs.collapse', function () {
 {% endhighlight %}
 
 ## C# #
-{% highlight csharp linenos %}
+{% highlight csharp %}
 using System;
 using System.IO;
 
