@@ -4,7 +4,7 @@ title: Code block testing
 subtitle: Lorem ipsum dolor sit amet
 ---
 
-Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper neque eu justo laoreet, sed egestas elit aliquam. Ut in dapibus lorem. Donec iaculis sem at ex lobortis iaculis. Aenean ac gravida metus. In malesuada purus sit amet eros gravida vestibulum. Nullam laoreet gravida gravida. Sed eget quam est. Nulla eu egestas tellus, ut vulputate neque. Aliquam eu congue purus. Donec est mauris, varius at viverra luctus, vestibulum sed tortor. Proin pulvinar tortor id sem dapibus, ac tincidunt libero lacinia.
 
 ## HTML
 {% highlight html %}
