@@ -14,8 +14,8 @@ avatar: "/img/avatar-icon.png"
 # List of links in the navigation bar
 navbar-links:
   Home: ""
-  About: "about"
-  Contact: "contact"
+  #About: "about"
+  #Contact: "contact"
 
 # --- Footer options --- #
 author:
