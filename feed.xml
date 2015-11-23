@@ -2,60 +2,103 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mel Lota</title>
-    <description>Web development, Microsoft Technologies and Raspberry Pi Hacking</description>
+    <description>Web development, Code Exploration and Raspberry Pi Hacking</description>
     <link>http://mlota.github.io/</link>
     <atom:link href="http://mlota.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 19 Nov 2015 10:05:36 +0000</pubDate>
-    <lastBuildDate>Thu, 19 Nov 2015 10:05:36 +0000</lastBuildDate>
+    <pubDate>Mon, 23 Nov 2015 21:53:08 +0000</pubDate>
+    <lastBuildDate>Mon, 23 Nov 2015 21:53:08 +0000</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
-        <title>Code block testing</title>
-        <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper neque eu justo laoreet, sed egestas elit aliquam. Ut in dapibus lorem. Donec iaculis sem at ex lobortis iaculis. Aenean ac gravida metus. In malesuada purus sit amet eros gravida vestibulum. Nullam laoreet gravida gravida. Sed eget quam est. Nulla eu egestas tellus, ut vulputate neque. Aliquam eu congue purus. Donec est mauris, varius at viverra luctus, vestibulum sed tortor. Proin pulvinar tortor id sem dapibus, ac tincidunt libero lacinia.&lt;/p&gt;
+        <title>Automating deployment of a GitHub Pages hosted site with Jekyll and Travis CI</title>
+        <description>&lt;p&gt;Earlier this month I set up this blog using the simple publishing mechanism provided by GitHub Pages and Jekyll. It all works perfectly, but as I began to delve deeper into Jekyll, I discovered that it’s possible to create a more efficient deployment workflow using Travis CI and GitHub. I’m a big advocate of continuous deployment and build automation so I had to check this out.&lt;/p&gt;
 
-&lt;h2 id=&quot;html&quot;&gt;HTML&lt;/h2&gt;
+&lt;p&gt;I also decided to move away from using the out-of-the-box build process that GitHub Pages provides for Jekyll. This is mainly due to the added flexibility of using custom plugins, as GitHub Pages runs in &lt;code class=&quot;highlighter-rouge&quot;&gt;--safe&lt;/code&gt; mode it effectively disables this feature. I found it wasn’t too difficult to get this all setup, but it does mean that you’ll need a local development environment with Ruby and Jekyll installed.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&amp;gt;&lt;/span&gt;Hello world&lt;span class=&quot;nt&quot;&gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;development-environment&quot;&gt;Development Environment&lt;/h2&gt;
 
-&lt;h2 id=&quot;javascript&quot;&gt;JavaScript&lt;/h2&gt;
+&lt;p&gt;I’m using a Macbook Pro with OSX - El Capitan (ridiculous name btw) so I started out by grabbing a copy of the following:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Shorten the navbar after scrolling a little bit down&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;scroll&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.navbar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;offset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;top&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.navbar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;top-nav-short&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.navbar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;removeClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;top-nav-short&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://brew.sh/&quot;&gt;Homebrew&lt;/a&gt; - A super-simple software package manager for the Mac. I found it was a bit like Chocolatey on Windows.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/sstephenson/rbenv&quot;&gt;rbenv&lt;/a&gt; - I had to use this in order to install the latest version of Ruby (2.2.3 at the time of writing) without affecting the system installed version.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://bundler.io/&quot;&gt;Bundler&lt;/a&gt; - This helps to manage Gem dependencies when working Ruby. I also like to set it up so that it installs required gems to the project directory to avoid clutter elsewhere&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;span class=&quot;c1&quot;&gt;// On mobile, hide the avatar when expanding the navbar menu&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;#main-navbar&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;show.bs.collapse&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.navbar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;top-nav-expanded&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;#main-navbar&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;hidden.bs.collapse&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.navbar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;removeClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;top-nav-expanded&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;I cloned a copy of the current, GitHub Pages oriented site down to my local machine and created a &lt;code class=&quot;highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt; to add the Jekyll dependencies:&lt;/p&gt;
 
-&lt;h2 id=&quot;c&quot;&gt;C#&lt;/h2&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://rubygems.org&quot;&lt;/span&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.IO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;jekyll&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;jekyll-paginate&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Foo&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Page_Load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EventArgs&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.google.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;I then ran the following command to install the gems into a &lt;strong&gt;vendor&lt;/strong&gt; folder in the root of the project directory:&lt;/p&gt;
 
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;bundler install --path vendor&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;I also created a simple shell script to serve the site locally:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;build.sh&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -e &lt;span class=&quot;c&quot;&gt;# halt script on error&lt;/span&gt;
+bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve --config _config.yml,_config_dev.yml --watch&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;There are a few interesting things going on here which I’ll elaborate on. Firstly it’s worth mentioning that by default the site will be served on port 4000, so you’ll be able to use your browser and navigate to &lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt;. I’m also supplying the &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt; command with two arguments:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--config&lt;/code&gt; accepts a comma separated list of site config files. Whichever file comes last in the list will override any settings in the preceding file. I’m using this so that I can set a separate &lt;strong&gt;baseurl&lt;/strong&gt; for dev, so that any global links work when I’m serving the site locally.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--watch&lt;/code&gt; tells Jekyll to watch for any file changes in the project directory, and automatically regenerate the site&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;automated-deployment&quot;&gt;Automated Deployment&lt;/h2&gt;
+
+&lt;p&gt;Next up was automating the deployment of the site files to GitHub Pages. &lt;a href=&quot;https://travis-ci.org&quot;&gt;Travis CI&lt;/a&gt; is an online, continuous integration service used for building and testing code. I’m new to Travis, but I frequently use other CI tools such as Jenkins and TeamCity so the concepts were familiar. One nice thing about Travis is that it is completely free to use on public source code repositories, so it’s ideal for a small project such as this blog.&lt;/p&gt;
+
+&lt;p&gt;For setting up the automated deployment, I used the following article as a reference point:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;http://eshepelyuk.github.io/2014/10/28/automate-github-pages-travisci.html&quot;&gt;Automate GitHub Pages publishing with Jekyll and Travis CI&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It roughly consists of performing the following steps&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Set up a new branch to contain the Jekyll source code and use the master branch to host the cleanly built site code&lt;/li&gt;
+  &lt;li&gt;Enabling Travis hook for the repository&lt;/li&gt;
+  &lt;li&gt;Create a personal access token in GitHub&lt;/li&gt;
+  &lt;li&gt;Creating a .travis.yml and build.sh file&lt;/li&gt;
+  &lt;li&gt;Running the build&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I won’t go into too much detail about these points here, as the article is quite concise. I did however run into a minor issue with permissions on the &lt;code class=&quot;highlighter-rouge&quot;&gt;build.sh&lt;/code&gt; file when I first tried running a build in Travis. After a bit of research I found this was due to the file requiring ‘execute’ permissions and could be easily remedied by adding a &lt;code class=&quot;highlighter-rouge&quot;&gt;chmod&lt;/code&gt; command to the &lt;code class=&quot;highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;s&quot;&gt;before_script&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;chmod +x &quot;./build.sh&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;enhancements&quot;&gt;Enhancements&lt;/h2&gt;
+&lt;p&gt;With Travis in place, enabling test scripts in the build process becomes quite a trivial task. I added the following enhancements…&lt;/p&gt;
+
+&lt;h3 id=&quot;html-proofer&quot;&gt;HTML proofer&lt;/h3&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/gjtorikian/html-proofer&quot;&gt;html-proofer&lt;/a&gt; Gem provides a set of tools for running checks on validity of links and images across a Jekyll generated site. I implemented this by adding the &lt;code class=&quot;highlighter-rouge&quot;&gt;html-proofer&lt;/code&gt; Gem to the Gemfile and the following line to the &lt;code class=&quot;highlighter-rouge&quot;&gt;build.sh&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;htmlproof ./_site --disable-external --check-html --verbose&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;With the optional arguments in that command, I am disabling the check for external links, checking the output files for valid HTML and outputting verbose results to the console.&lt;/p&gt;
+
+&lt;h3 id=&quot;html-beautifier&quot;&gt;HTML Beautifier&lt;/h3&gt;
+
+&lt;p&gt;Seeing as I have a touch of OCD, I like to keep the HTML output on my sites tidy and indented correctly. This is somewhat difficult to accomplish when working with Jekyll as the various includes and liquid templating leave unwanted spacing and indentation. I came across a Gem called &lt;a href=&quot;https://github.com/threedaymonk/htmlbeautifier&quot;&gt;htmlbeautifier&lt;/a&gt; which takes an input file and outputs a nicely indented HTML document. The documentation is a little sparse for this one, so I had to figure out how to run this for all the HTML files in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_site&lt;/code&gt; directory. I came up with the following command which can be added &lt;code class=&quot;highlighter-rouge&quot;&gt;build.sh&lt;/code&gt; file and seems to work perfectly:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;find ./_site -name &lt;span class=&quot;s2&quot;&gt;&quot;*.html&quot;&lt;/span&gt; -exec bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;htmlbeautifier &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I’ve certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I’d like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I’ve spoke about in this article is free to view on the &lt;a href=&quot;https://github.com/mlota/mlota.github.io/tree/source&quot;&gt;GitHub repository for this blog&lt;/a&gt;. Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)&lt;/p&gt;
 </description>
-        <pubDate>Sun, 08 Nov 2015 00:00:00 +0000</pubDate>
-        <link>http://mlota.github.io/2015/11/08/code-block-testing.html</link>
-        <guid isPermaLink="true">http://mlota.github.io/2015/11/08/code-block-testing.html</guid>
+        <pubDate>Mon, 23 Nov 2015 00:00:00 +0000</pubDate>
+        <link>http://mlota.github.io/2015/11/23/automating-deployment-github-pages-jekyll-travis.html</link>
+        <guid isPermaLink="true">http://mlota.github.io/2015/11/23/automating-deployment-github-pages-jekyll-travis.html</guid>
         
         
       </item>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Automating deployment of a GitHub Pages hosted site with Jekyll and Travis CI</title>
+    <meta name="description" content="Earlier this month I set up this blog using the simple publishing mechanism provided by GitHub Pages and Jekyll. It all works perfectly, but as I began to de...">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://mlota.github.io/2015/11/23/automating-deployment-github-pages-jekyll-travis.html">
+    <link rel="alternate" type="application/rss+xml" title="Mel Lota" href="http://mlota.github.io/feed.xml">
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://mlota.github.io">Mel Lota</a>
+        </div>
+        <div class="collapse navbar-collapse" id="main-navbar">
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/about">About</a>
+            </li>
+            <li>
+              <a href="/contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+        <div class="avatar-container">
+          <div class="avatar-img-border">
+            <a href="http://mlota.github.io ">
+              <img class="avatar-img" src="/img/avatar-icon.png" alt="Mel Lota"/>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div role="main" class="container main-content">
+      <header class="header-post">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>Automating deployment of a GitHub Pages hosted site with Jekyll and Travis CI</h1>
+              <h2 class="post-subheading">Searching for the perfect blog deployment workflow</h2>
+              <span class="post-meta">Posted on November 23, 2015</span>
+            </div>
+          </div>
+        </div>
+      </header>
+      <article>
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <p>Earlier this month I set up this blog using the simple publishing mechanism provided by GitHub Pages and Jekyll. It all works perfectly, but as I began to delve deeper into Jekyll, I discovered that it’s possible to create a more efficient deployment workflow using Travis CI and GitHub. I’m a big advocate of continuous deployment and build automation so I had to check this out.</p>
+            <p>I also decided to move away from using the out-of-the-box build process that GitHub Pages provides for Jekyll. This is mainly due to the added flexibility of using custom plugins, as GitHub Pages runs in <code class="highlighter-rouge">--safe</code> mode it effectively disables this feature. I found it wasn’t too difficult to get this all setup, but it does mean that you’ll need a local development environment with Ruby and Jekyll installed.</p>
+            <h2 id="development-environment">Development Environment</h2>
+            <p>I’m using a Macbook Pro with OSX - El Capitan (ridiculous name btw) so I started out by grabbing a copy of the following:</p>
+            <ul>
+              <li><a href="http://brew.sh/">Homebrew</a> - A super-simple software package manager for the Mac. I found it was a bit like Chocolatey on Windows.</li>
+              <li><a href="https://github.com/sstephenson/rbenv">rbenv</a> - I had to use this in order to install the latest version of Ruby (2.2.3 at the time of writing) without affecting the system installed version.</li>
+              <li><a href="http://bundler.io/">Bundler</a> - This helps to manage Gem dependencies when working Ruby. I also like to set it up so that it installs required gems to the project directory to avoid clutter elsewhere</li>
+            </ul>
+            <p>I cloned a copy of the current, GitHub Pages oriented site down to my local machine and created a <code class="highlighter-rouge">Gemfile</code> to add the Jekyll dependencies:</p>
+            <figure class="highlight">
+              <pre><code class="language-ruby" data-lang="ruby"><span class="n">source</span> <span class="s2">"https://rubygems.org"</span>
+
+<span class="n">gem</span> <span class="s2">"jekyll"</span>
+<span class="n">gem</span> <span class="s2">"jekyll-paginate"</span></code></pre>
+            </figure>
+            <p>I then ran the following command to install the gems into a <strong>vendor</strong> folder in the root of the project directory:</p>
+            <figure class="highlight">
+              <pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>bundler install --path vendor</code></pre>
+            </figure>
+            <p>I also created a simple shell script to serve the site locally:</p>
+            <p><strong>build.sh</strong></p>
+            <figure class="highlight">
+              <pre><code class="language-bash" data-lang="bash"><span class="c">#!/usr/bin/env bash</span>
+<span class="nb">set</span> -e <span class="c"># halt script on error</span>
+bundle <span class="nb">exec </span>jekyll serve --config _config.yml,_config_dev.yml --watch</code></pre>
+            </figure>
+            <p>There are a few interesting things going on here which I’ll elaborate on. Firstly it’s worth mentioning that by default the site will be served on port 4000, so you’ll be able to use your browser and navigate to <a href="http://localhost:4000">http://localhost:4000</a>. I’m also supplying the <code class="highlighter-rouge">jekyll serve</code> command with two arguments:</p>
+            <ul>
+              <li><code class="highlighter-rouge">--config</code> accepts a comma separated list of site config files. Whichever file comes last in the list will override any settings in the preceding file. I’m using this so that I can set a separate <strong>baseurl</strong> for dev, so that any global links work when I’m serving the site locally.</li>
+              <li><code class="highlighter-rouge">--watch</code> tells Jekyll to watch for any file changes in the project directory, and automatically regenerate the site</li>
+            </ul>
+            <h2 id="automated-deployment">Automated Deployment</h2>
+            <p>Next up was automating the deployment of the site files to GitHub Pages. <a href="https://travis-ci.org">Travis CI</a> is an online, continuous integration service used for building and testing code. I’m new to Travis, but I frequently use other CI tools such as Jenkins and TeamCity so the concepts were familiar. One nice thing about Travis is that it is completely free to use on public source code repositories, so it’s ideal for a small project such as this blog.</p>
+            <p>For setting up the automated deployment, I used the following article as a reference point:</p>
+            <blockquote>
+              <p><a href="http://eshepelyuk.github.io/2014/10/28/automate-github-pages-travisci.html">Automate GitHub Pages publishing with Jekyll and Travis CI</a></p>
+            </blockquote>
+            <p>It roughly consists of performing the following steps</p>
+            <ul>
+              <li>Set up a new branch to contain the Jekyll source code and use the master branch to host the cleanly built site code</li>
+              <li>Enabling Travis hook for the repository</li>
+              <li>Create a personal access token in GitHub</li>
+              <li>Creating a .travis.yml and build.sh file</li>
+              <li>Running the build</li>
+            </ul>
+            <p>I won’t go into too much detail about these points here, as the article is quite concise. I did however run into a minor issue with permissions on the <code class="highlighter-rouge">build.sh</code> file when I first tried running a build in Travis. After a bit of research I found this was due to the file requiring ‘execute’ permissions and could be easily remedied by adding a <code class="highlighter-rouge">chmod</code> command to the <code class="highlighter-rouge">.travis.yml</code> file:</p>
+            <figure class="highlight">
+              <pre><code class="language-yaml" data-lang="yaml"><span class="s">before_script</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="s">chmod +x "./build.sh"</span></code></pre>
+            </figure>
+            <h2 id="enhancements">Enhancements</h2>
+            <p>With Travis in place, enabling test scripts in the build process becomes quite a trivial task. I added the following enhancements…</p>
+            <h3 id="html-proofer">HTML proofer</h3>
+            <p>The <a href="https://github.com/gjtorikian/html-proofer">html-proofer</a> Gem provides a set of tools for running checks on validity of links and images across a Jekyll generated site. I implemented this by adding the <code class="highlighter-rouge">html-proofer</code> Gem to the Gemfile and the following line to the <code class="highlighter-rouge">build.sh</code> file:</p>
+            <figure class="highlight">
+              <pre><code class="language-bash" data-lang="bash">bundle <span class="nb">exec </span>htmlproof ./_site --disable-external --check-html --verbose</code></pre>
+            </figure>
+            <p>With the optional arguments in that command, I am disabling the check for external links, checking the output files for valid HTML and outputting verbose results to the console.</p>
+            <h3 id="html-beautifier">HTML Beautifier</h3>
+            <p>Seeing as I have a touch of OCD, I like to keep the HTML output on my sites tidy and indented correctly. This is somewhat difficult to accomplish when working with Jekyll as the various includes and liquid templating leave unwanted spacing and indentation. I came across a Gem called <a href="https://github.com/threedaymonk/htmlbeautifier">htmlbeautifier</a> which takes an input file and outputs a nicely indented HTML document. The documentation is a little sparse for this one, so I had to figure out how to run this for all the HTML files in the <code class="highlighter-rouge">_site</code> directory. I came up with the following command which can be added <code class="highlighter-rouge">build.sh</code> file and seems to work perfectly:</p>
+            <figure class="highlight">
+              <pre><code class="language-bash" data-lang="bash">find ./_site -name <span class="s2">"*.html"</span> -exec bundle <span class="nb">exec </span>htmlbeautifier <span class="o">{}</span> <span class="se">\;</span></code></pre>
+            </figure>
+            <h2 id="summary">Summary</h2>
+            <p>Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I’ve certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I’d like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I’ve spoke about in this article is free to view on the <a href="https://github.com/mlota/mlota.github.io/tree/source">GitHub repository for this blog</a>. Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)</p>
+          </div>
+        </div>
+      </article>
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <ul class="pager blog-pager">
+            <li class="previous">
+              <a href="/2015/11/04/a-new-blog-first-steps-with-jekyll.html" data-toggle="tooltip" data-placement="top" title="A New Blog!!">&larr; Previous Post</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row disqus-comments">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <div class="comments">
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+              var disqus_shortname = 'mlota';
+              	    // ensure that pages with query string get the same discussion
+                          var url_parts = window.location.href.split("?");
+                          var disqus_url = url_parts[0];
+              	    (function() {
+              	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+              	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+              	    })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="container beautiful-jekyll-footer">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <ul class="list-inline text-center footer-links">
+              <li>
+                <a href="https://www.facebook.com/mel.lota" title="Facebook">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/mlota" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/mlota" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:melvin@auronmedia.co.uk" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">
+              Mel Lota
+      &nbsp;&bull;&nbsp;
+      2015
+      
+      
+      </p>
+            <!-- Please don't remove this, keep my open source work credited :) -->
+            <p class="theme-by text-muted">
+              Theme by
+      <a href="http://deanattali.com/beautiful-jekyll/">beautiful-jekyll</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      		ga('create', 'UA-15238345-6', 'auto');
+      		ga('send', 'pageview');
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>
