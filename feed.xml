@@ -5,8 +5,8 @@
     <description>Web development, Code Exploration and Raspberry Pi Hacking</description>
     <link>http://mlota.github.io/</link>
     <atom:link href="http://mlota.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 23 Nov 2015 22:03:25 +0000</pubDate>
-    <lastBuildDate>Mon, 23 Nov 2015 22:03:25 +0000</lastBuildDate>
+    <pubDate>Tue, 24 Nov 2015 09:03:32 +0000</pubDate>
+    <lastBuildDate>Tue, 24 Nov 2015 09:03:32 +0000</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -38,7 +38,7 @@
 
 &lt;p&gt;I also created a simple shell script to serve the site locally:&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;build.sh&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;serve.sh&lt;/strong&gt;&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env bash&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -e &lt;span class=&quot;c&quot;&gt;# halt script on error&lt;/span&gt;
@@ -94,7 +94,7 @@ bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll serve --config 
 
 &lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
 
-&lt;p&gt;Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I’ve certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I’d like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I’ve spoke about in this article is free to view on the &lt;a href=&quot;https://github.com/mlota/mlota.github.io/tree/source&quot;&gt;GitHub repository for this blog&lt;/a&gt;. Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)&lt;/p&gt;
+&lt;p&gt;Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I’ve certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I’d like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I’ve spoken about in this article is free to view on the &lt;a href=&quot;https://github.com/mlota/mlota.github.io/tree/source&quot;&gt;GitHub repository for this blog&lt;/a&gt;. Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Nov 2015 00:00:00 +0000</pubDate>
         <link>http://mlota.github.io/2015/11/23/automating-deployment-github-pages-jekyll-travis.html</link>

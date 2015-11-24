@@ -78,7 +78,7 @@
               <pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>bundler install --path vendor</code></pre>
             </figure>
             <p>I also created a simple shell script to serve the site locally:</p>
-            <p><strong>build.sh</strong></p>
+            <p><strong>serve.sh</strong></p>
             <figure class="highlight">
               <pre><code class="language-bash" data-lang="bash"><span class="c">#!/usr/bin/env bash</span>
 <span class="nb">set</span> -e <span class="c"># halt script on error</span>
@@ -122,7 +122,7 @@ bundle <span class="nb">exec </span>jekyll serve --config _config.yml,_config_de
               <pre><code class="language-bash" data-lang="bash">find ./_site -name <span class="s2">"*.html"</span> -exec bundle <span class="nb">exec </span>htmlbeautifier <span class="o">{}</span> <span class="se">\;</span></code></pre>
             </figure>
             <h2 id="summary">Summary</h2>
-            <p>Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I’ve certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I’d like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I’ve spoke about in this article is free to view on the <a href="https://github.com/mlota/mlota.github.io/tree/source">GitHub repository for this blog</a>. Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)</p>
+            <p>Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I’ve certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I’d like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I’ve spoken about in this article is free to view on the <a href="https://github.com/mlota/mlota.github.io/tree/source">GitHub repository for this blog</a>. Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)</p>
           </div>
         </div>
       </article>
