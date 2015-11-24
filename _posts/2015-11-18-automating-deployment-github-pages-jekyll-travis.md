@@ -1,10 +1,11 @@
 ---
 layout: post
-title: "Automating deployment of a GitHub Pages hosted site with Jekyll and Travis CI"
+title: Automating deployment of a GitHub Pages hosted site with Jekyll and Travis CI
 subtitle: Searching for the perfect blog deployment workflow
 published: true
 date: "2015-11-23"
 ---
+
 
 Earlier this month I set up this blog using the simple publishing mechanism provided by GitHub Pages and Jekyll. It all works perfectly, but as I began to delve deeper into Jekyll, I discovered that it's possible to create a more efficient deployment workflow using Travis CI and GitHub. I’m a big advocate of continuous deployment and build automation so I had to check this out.
 
@@ -35,7 +36,7 @@ $ bundler install --path vendor
 
 I also created a simple shell script to serve the site locally:
 
-**build.sh**
+**serve.sh**
 {% highlight bash %}
 #!/usr/bin/env bash
 set -e # halt script on error
@@ -92,4 +93,4 @@ find ./_site -name "*.html" -exec bundle exec htmlbeautifier {} \;
 
 ## Summary
 
-Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I've certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I'd like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I've spoke about in this article is free to view on the [GitHub repository for this blog](https://github.com/mlota/mlota.github.io/tree/source). Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)
+Switching from the standard GitHub Pages build process to Travis is not as daunting as it seems and I've certainly learnt a fair bit about Ruby and bash scripts along the way. Going forward, I'd like to look at other ways I can optimse the site during the build process such as minifying scripts. All of the code I've spoken about in this article is free to view on the [GitHub repository for this blog](https://github.com/mlota/mlota.github.io/tree/source). Hope this comes in handy for anyone looking to improve their Jekyll blog deployment :)
